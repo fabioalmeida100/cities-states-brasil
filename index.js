@@ -8,37 +8,27 @@ init();
 
 function init() {
    createFileCity();
-   const countCitiesOfState = GetCitiesByUF(_UF).length;
-   const count5StatesWithMoresCities = Get5StatesWithMoreCities();
-   const count5StatesWithMinusCities = Get5StatesWithMinusCities();
-   const citiesWithBiggestNameOfState = GetCitiesWithBiggestNameOfState();
-   const citiesWithSmallestNameOfState = GetCitiesWithSmallestNameOfState();
-
-   console.log(`--- Quantidade de cidade na UF ${_UF} ---`);
-   console.log(`${countCitiesOfState} cidades \n`);
-   console.log(`--- 5 estados com mais cidades ---`);
-   console.log(`${ count5StatesWithMoresCities } \n`);
-   console.log(`--- 5 estados com menos cidades ---`);
-   console.log(`${ count5StatesWithMinusCities } \n`);
-   console.log(`--- Cidades com maiores nomes por estado ---`);
-   console.log(`${ citiesWithBiggestNameOfState } \n`);
-   console.log(`--- Cidades com menores nomes por estado ---`);
-   console.log(`${ citiesWithSmallestNameOfState } \n`);
-   console.log(`--- Cidades com maior nome ---`);
-   console.log(`${ citiesWithBiggestNameOfState[0].Cidade } - ${ citiesWithBiggestNameOfState[0].Estado } \n`);
-   console.log(`--- Cidades com menor nome ---`);
-   console.log(`${ citiesWithSmallestNameOfState[0].Cidade } - ${ citiesWithSmallestNameOfState[0].Estado}  \n`);
+   
+   ShowCitiesOfStateByArgv();
+   Show5StatesWithMoreCities();
+   Show5StatesWithMinusCities();
+   ShowCitiesWithBiggestNameByState();
+   ShowCitiesWithSmallestNameByState();
+   ShowCityWithBiggestName();
+   ShowCityWithSmallestName();
 }
 
-function GetCitiesByUF(uf) {
-  const cities = JSON.parse(fs.readFileSync(`${folderCities}${uf}.json`));
-  return cities;
+function ShowCitiesOfStateByArgv() {
+  const countCitiesOfState = GetCitiesByUF(_UF).length;
+  console.log(`--- Quantidade de cidade na UF ${_UF} ---`);
+  console.log(`${countCitiesOfState} cidades \n`);
 }
 
-function Get5StatesWithMoreCities() {
+function Show5StatesWithMoreCities() {
   let count = [];
   let countCitiesByState = [];
   let objState = {};
+  let fiveStatesWithMoreCities = []
 
   for (let i = 0; i < _states.length; i++) {    
      count = GetCitiesByUF(_states[i].Sigla).length;
@@ -46,12 +36,18 @@ function Get5StatesWithMoreCities() {
      countCitiesByState.push(objState);
   }
 
-  return JSON.stringify(countCitiesByState.sort((a, b) => {  
+  fiveStatesWithMoreCities = countCitiesByState.sort((a, b) => {  
       return b.Quantidade - a.Quantidade;
-  }).slice(0, 5), null, 2);
+  }).slice(0, 5);
+
+  console.log(`--- 5 estados com mais cidades ---`);
+  fiveStatesWithMoreCities.forEach(element => {
+    console.log(`${ element.UF } - ${ element.Quantidade} `)
+  });
+  console.log("")
 } 
 
-function Get5StatesWithMinusCities() {
+function Show5StatesWithMinusCities() {
   let count = [];
   let countCitiesByState = [];
   let objState = {};
@@ -62,15 +58,22 @@ function Get5StatesWithMinusCities() {
      countCitiesByState.push(objState);
   }
 
-  return JSON.stringify(countCitiesByState.sort((a, b) => {  
-      return a.Quantidade - b.Quantidade;
+  fiveStatesWithMoreCities = countCitiesByState.sort((a, b) => {  
+    return a.Quantidade - b.Quantidade;
   }).slice(0, 5)
-  .sort((a, b) => {
-    return b.Quantidade - a.Quantidade;
-  }), null, 2);
+    .sort((a, b) => {
+      return b.Quantidade - a.Quantidade
+    });
+
+  console.log(`--- 5 estados com menos cidades ---`);
+  fiveStatesWithMoreCities.forEach(element => {
+    console.log(`${ element.UF } - ${ element.Quantidade} `)
+  });
+
+  console.log("")
 } 
 
-function GetCitiesWithBiggestNameOfState() {
+function ShowCitiesWithBiggestNameByState() {
   let citiesOfState = [];
   let cityWithBiggestName = [];
 
@@ -82,12 +85,15 @@ function GetCitiesWithBiggestNameOfState() {
      cityWithBiggestName.push({ "Cidade": citiesOfState[0].Nome, "UF": _states[i].Sigla });    
   }
 
-  return cityWithBiggestName.sort((a, b) => {
-    return b.Cidade.length - a.Cidade.length 
+  console.log(`--- Cidades com maiores nomes por estado ---`);
+  cityWithBiggestName.forEach(element => {
+    console.log(`${ element.Cidade } - ${ element.UF} `)
   });
+
+  console.log("");  
 } 
 
-function GetCitiesWithSmallestNameOfState() {
+function ShowCitiesWithSmallestNameByState() {
   let citiesOfState = [];
   let cityWithSmallestName = [];
 
@@ -99,9 +105,69 @@ function GetCitiesWithSmallestNameOfState() {
      cityWithSmallestName.push({ "Cidade": citiesOfState[0].Nome, "UF": _states[i].Sigla });    
   }
 
-  return cityWithSmallestName.sort((a, b) => {
-    return a.Cidade.length - b.Cidade.length 
+  console.log(`--- Cidades com menores nomes por estado ---`);
+  cityWithSmallestName.forEach(element => {
+    console.log(`${ element.Cidade } - ${ element.UF} `)
   });
+
+  console.log("");  
+} 
+
+function ShowCityWithBiggestName() {
+  let citiesOfState = [];
+  let cityWithBiggestName = [];
+
+  for (let i = 0; i < _states.length; i++) {    
+     citiesOfState = GetCitiesByUF(_states[i].Sigla).sort((a, b) => {
+       return b.Nome.length - a.Nome.length; 
+     });
+
+     cityWithBiggestName.push({ "Cidade": citiesOfState[0].Nome, "UF": _states[i].Sigla });    
+  }
+
+  let lengthOfBiggestNameCity = cityWithBiggestName.sort((a, b) => {
+    return b.Cidade.length - a.Cidade.length 
+  })[0].Cidade.length;
+
+  var onlyBiggestCities = cityWithBiggestName.filter(cidade => {
+      return cidade.Cidade.length == lengthOfBiggestNameCity;
+  }).sort((a, b) => {
+    return a.Cidade < b.Cidade ? -1 : a.Cidade > b.Cidade ? 1 : 0;
+  })
+  
+  console.log(`--- Cidades com maior nome ---`);
+  console.log(`${ onlyBiggestCities[0].Cidade } - ${ onlyBiggestCities[0].UF }  \n`);
+}
+
+function ShowCityWithSmallestName() {
+  let citiesOfState = [];
+  let cityWithSmallestName = [];
+
+  for (let i = 0; i < _states.length; i++) {    
+     citiesOfState = GetCitiesByUF(_states[i].Sigla).sort((a, b) => {
+       return a.Nome.length - b.Nome.length; 
+     });
+
+     cityWithSmallestName.push({ "Cidade": citiesOfState[0].Nome, "UF": _states[i].Sigla });    
+  }
+
+  let lengthOfSmallNameCity = cityWithSmallestName.sort((a, b) => {
+    return a.Cidade.length - b.Cidade.length 
+  })[0].Cidade.length;
+
+  var onlySmallCities = cityWithSmallestName.filter(cidade => {
+      return cidade.Cidade.length == lengthOfSmallNameCity;
+  }).sort((a, b) => {
+    return a.Cidade < b.Cidade ? -1 : a.Cidade > b.Cidade ? 1 : 0;
+  })
+  
+  console.log(`--- Cidades com menor nome ---`);
+  console.log(`${ onlySmallCities[0].Cidade } - ${ onlySmallCities[0].UF }  \n`);
+}
+
+function GetCitiesByUF(uf) {
+  const cities = JSON.parse(fs.readFileSync(`${folderCities}${uf}.json`));
+  return cities;
 }
 
 function createFileCity() {
