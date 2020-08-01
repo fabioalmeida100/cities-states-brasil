@@ -58,7 +58,6 @@ function Get5StatesWithMinusCities() {
   .sort((a, b) => {
     return b.Quantidade - a.Quantidade;
   }), null, 2);
-;
 } 
 
 function createFileCity() {
