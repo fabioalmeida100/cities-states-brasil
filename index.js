@@ -44,7 +44,7 @@ function Get5StatesWithMoreCities() {
 
   return JSON.stringify(countCitiesByState.sort((a, b) => {  
       return b.Quantidade - a.Quantidade;
-  }).slice(0, 6), null, 2);
+  }).slice(0, 5), null, 2);
 } 
 
 function Get5StatesWithMinusCities() {
@@ -60,7 +60,7 @@ function Get5StatesWithMinusCities() {
 
   return JSON.stringify(countCitiesByState.sort((a, b) => {  
       return a.Quantidade - b.Quantidade;
-  }).slice(0, 6)
+  }).slice(0, 5)
   .sort((a, b) => {
     return b.Quantidade - a.Quantidade;
   }), null, 2);
