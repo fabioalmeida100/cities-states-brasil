@@ -9,7 +9,7 @@ init();
 function init() {
    createFileCity();
    const countCitiesOfState = GetCitiesByUF(_UF).length;
-   const countCitiesByState = Get5StatesWithMoreCities();
+   const count5StatesWithMoresCities = Get5StatesWithMoreCities();
    const count5StatesWithMinusCities = Get5StatesWithMinusCities();
    const citiesWithBiggestNameOfState = GetCitiesWithBiggestNameOfState();
    const citiesWithSmallestNameOfState = GetCitiesWithSmallestNameOfState();
@@ -17,13 +17,17 @@ function init() {
    console.log(`--- Quantidade de cidade na UF ${_UF} ---`);
    console.log(`${countCitiesOfState} cidades \n`);
    console.log(`--- 5 estados com mais cidades ---`);
-   console.log(`${ countCitiesByState } \n`);
+   console.log(`${ count5StatesWithMoresCities } \n`);
    console.log(`--- 5 estados com menos cidades ---`);
    console.log(`${ count5StatesWithMinusCities } \n`);
    console.log(`--- Cidades com maiores nomes por estado ---`);
    console.log(`${ citiesWithBiggestNameOfState } \n`);
    console.log(`--- Cidades com menores nomes por estado ---`);
    console.log(`${ citiesWithSmallestNameOfState } \n`);
+   console.log(`--- Cidades com maior nome ---`);
+   console.log(`${ citiesWithBiggestNameOfState[0].Cidade } - ${ citiesWithBiggestNameOfState[0].Estado } \n`);
+   console.log(`--- Cidades com menor nome ---`);
+   console.log(`${ citiesWithSmallestNameOfState[0].Cidade } - ${ citiesWithSmallestNameOfState[0].Estado}  \n`);
 }
 
 function GetCitiesByUF(uf) {
@@ -75,10 +79,12 @@ function GetCitiesWithBiggestNameOfState() {
        return b.Nome.length - a.Nome.length; 
      });
 
-     cityWithBiggestName.push(citiesOfState[0].Nome + ' - ' + _states[i].Sigla);    
+     cityWithBiggestName.push({ "Cidade": citiesOfState[0].Nome, "UF": _states[i].Sigla });    
   }
 
-  return cityWithBiggestName;
+  return cityWithBiggestName.sort((a, b) => {
+    return b.Cidade.length - a.Cidade.length 
+  });
 } 
 
 function GetCitiesWithSmallestNameOfState() {
@@ -90,10 +96,12 @@ function GetCitiesWithSmallestNameOfState() {
        return a.Nome.length - b.Nome.length; 
      });
 
-     cityWithSmallestName.push(citiesOfState[0].Nome + ' - ' + _states[i].Sigla);    
+     cityWithSmallestName.push({ "Cidade": citiesOfState[0].Nome, "UF": _states[i].Sigla });    
   }
 
-  return cityWithSmallestName;
+  return cityWithSmallestName.sort((a, b) => {
+    return a.Cidade.length - b.Cidade.length 
+  });
 }
 
 function createFileCity() {
