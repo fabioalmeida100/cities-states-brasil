@@ -8,9 +8,11 @@ init();
 
 function init() {
    createFileCity();
-   const countCitiesOfState = countCities(_UF);
+   const countCitiesOfState = GetCitiesByUF(_UF).length;
    const countCitiesByState = Get5StatesWithMoreCities();
    const count5StatesWithMinusCities = Get5StatesWithMinusCities();
+   const citiesWithBiggestNameOfState = GetCitiesWithBiggestNameOfState();
+   const citiesWithSmallestNameOfState = GetCitiesWithSmallestNameOfState();
 
    console.log(`--- Quantidade de cidade na UF ${_UF} ---`);
    console.log(`${countCitiesOfState} cidades \n`);
@@ -18,11 +20,15 @@ function init() {
    console.log(`${ countCitiesByState } \n`);
    console.log(`--- 5 estados com menos cidades ---`);
    console.log(`${ count5StatesWithMinusCities } \n`);
+   console.log(`--- Cidades com maiores nomes por estado ---`);
+   console.log(`${ citiesWithBiggestNameOfState } \n`);
+   console.log(`--- Cidades com menores nomes por estado ---`);
+   console.log(`${ citiesWithSmallestNameOfState } \n`);
 }
 
-function countCities(uf) {
+function GetCitiesByUF(uf) {
   const cities = JSON.parse(fs.readFileSync(`${folderCities}${uf}.json`));
-  return cities.length;
+  return cities;
 }
 
 function Get5StatesWithMoreCities() {
@@ -31,7 +37,7 @@ function Get5StatesWithMoreCities() {
   let objState = {};
 
   for (let i = 0; i < _states.length; i++) {    
-     count = countCities(_states[i].Sigla);
+     count = GetCitiesByUF(_states[i].Sigla).length;
      objState = { "UF": _states[i].Sigla, "Quantidade": count };
      countCitiesByState.push(objState);
   }
@@ -47,7 +53,7 @@ function Get5StatesWithMinusCities() {
   let objState = {};
 
   for (let i = 0; i < _states.length; i++) {    
-     count = countCities(_states[i].Sigla);
+     count = GetCitiesByUF(_states[i].Sigla).length;
      objState = { "UF": _states[i].Sigla, "Quantidade": count };
      countCitiesByState.push(objState);
   }
@@ -59,6 +65,36 @@ function Get5StatesWithMinusCities() {
     return b.Quantidade - a.Quantidade;
   }), null, 2);
 } 
+
+function GetCitiesWithBiggestNameOfState() {
+  let citiesOfState = [];
+  let cityWithBiggestName = [];
+
+  for (let i = 0; i < _states.length; i++) {    
+     citiesOfState = GetCitiesByUF(_states[i].Sigla).sort((a,b) => {
+       return b.Nome.length - a.Nome.length; 
+     });
+
+     cityWithBiggestName.push(citiesOfState[0].Nome + ' - ' + _states[i].Sigla);    
+  }
+
+  return cityWithBiggestName;
+} 
+
+function GetCitiesWithSmallestNameOfState() {
+  let citiesOfState = [];
+  let cityWithSmallestName = [];
+
+  for (let i = 0; i < _states.length; i++) {    
+     citiesOfState = GetCitiesByUF(_states[i].Sigla).sort((a,b) => {
+       return a.Nome.length - b.Nome.length; 
+     });
+
+     cityWithSmallestName.push(citiesOfState[0].Nome + ' - ' + _states[i].Sigla);    
+  }
+
+  return cityWithSmallestName;
+}
 
 function createFileCity() {
   _states = JSON.parse(fs.readFileSync("Estados.json"));
