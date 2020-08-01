@@ -8,7 +8,7 @@ init();
 
 function init() {
    createFileCity();
-   
+
    ShowCitiesOfStateByArgv();
    Show5StatesWithMoreCities();
    Show5StatesWithMinusCities();
@@ -82,7 +82,17 @@ function ShowCitiesWithBiggestNameByState() {
        return b.Nome.length - a.Nome.length; 
      });
 
-     cityWithBiggestName.push({ "Cidade": citiesOfState[0].Nome, "UF": _states[i].Sigla });    
+    let lengthOfBiggestNameCity = citiesOfState.sort((a, b) => {
+      return b.Nome.length - a.Nome.length 
+    })[0].Nome.length;
+  
+    var onlyBiggestCities = citiesOfState.filter(cidade => {
+        return cidade.Nome.length == lengthOfBiggestNameCity;
+    }).sort((a, b) => {
+      return a.Cidade < b.Cidade ? -1 : a.Cidade > b.Cidade ? 1 : 0;
+    })
+
+     cityWithBiggestName.push({ "Cidade": onlyBiggestCities[0].Nome, "UF": _states[i].Sigla });    
   }
 
   console.log(`--- Cidades com maiores nomes por estado ---`);
@@ -102,7 +112,17 @@ function ShowCitiesWithSmallestNameByState() {
        return a.Nome.length - b.Nome.length; 
      });
 
-     cityWithSmallestName.push({ "Cidade": citiesOfState[0].Nome, "UF": _states[i].Sigla });    
+    let lengthOfSmallNameCity = citiesOfState.sort((a, b) => {
+        return a.Nome.length - b.Nome.length 
+    })[0].Nome.length;
+  
+    let onlySmallCities = citiesOfState.filter(cidade => {
+        return cidade.Nome.length == lengthOfSmallNameCity;
+    }).sort((a, b) => {
+      return a.Cidade < b.Cidade ? -1 : a.Cidade > b.Cidade ? 1 : 0;
+    })
+
+     cityWithSmallestName.push({ "Cidade": onlySmallCities[0].Nome, "UF": _states[i].Sigla });    
   }
 
   console.log(`--- Cidades com menores nomes por estado ---`);
