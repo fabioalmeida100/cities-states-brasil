@@ -9,12 +9,12 @@ init();
 function init() {
    createFileCity();
    const countCitiesOfState = countCities(_UF);
-   const countCitiesByState = GetArrayCountCitiesOfStates();
+   const countCitiesByState = Get5StatesWithMoreCities();
 
    console.log(`--- Quantidade de cidade na UF ${_UF} ---`);
    console.log(`${countCitiesOfState} cidades \n`);
-   console.log(`--- Quantidade de cidades por estado ---`);
-   console.log(`${ JSON.stringify(countCitiesByState.slice(0, 6), null, 2) } \n`);
+   console.log(`--- 5 estados com mais cidades ---`);
+   console.log(`${ countCitiesByState } \n`);
 }
 
 function countCities(uf) {
@@ -22,7 +22,7 @@ function countCities(uf) {
   return cities.length;
 }
 
-function GetArrayCountCitiesOfStates() {
+function Get5StatesWithMoreCities() {
   let count = [];
   let countCitiesByState = [];
   let objState = {};
@@ -33,9 +33,9 @@ function GetArrayCountCitiesOfStates() {
      countCitiesByState.push(objState);
   }
 
-  return countCitiesByState.sort((a, b) => {  
+  return JSON.stringify(countCitiesByState.sort((a, b) => {  
       return b.Quantidade - a.Quantidade;
-  });
+  }).slice(0, 6), null, 2);
 } 
 
 function createFileCity() {
