@@ -1,0 +1,13 @@
+{
+  "name": "cidades-estados-brasil",
+  "version": "1.0.0",
+  "description": "Cidades Estados do Brasil em JSON ====================",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Fabio Almeida <fabioalmeida@fabiodeveloper.com>",
+  "license": "MIT",
+  "type": "module"
+}
