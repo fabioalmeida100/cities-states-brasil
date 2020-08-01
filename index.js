@@ -1,9 +1,21 @@
 import { promises as fs } from "fs";
+import { Console } from "console";
+
+const _UF = process.argv[2].trim();
+const folderCities = "cities-state/";
 
 init();
 
-function  init() {
+async function  init() {
    createFileCity();
+   const countCitiesOfState = await countCities();
+
+   console.log(`A UF: ${_UF} tem ${countCitiesOfState} cidades`);
+}
+
+async function countCities() {
+  const cities = JSON.parse(await fs.readFile(`${folderCities}${_UF}.json`));
+  return cities.length;
 }
 
 async function createFileCity() {
@@ -15,7 +27,8 @@ async function createFileCity() {
           return cidade.Estado === element.ID;
       });
       
-      fs.writeFile(`cities-state/${element.Sigla}.json`, JSON.stringify(cityOfState, null, 2));
+      fs.writeFile(`${folderCities}${element.Sigla}.json`, JSON.stringify(cityOfState, null, 2));
   });
 }
+
 
