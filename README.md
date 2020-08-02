@@ -2,7 +2,7 @@
 
 This simple project is for show data about some cities and states of Brazil. The main subject of the project is for show how you can use the FileSystem module with arrays funtions for manipulate many files.
 
-This project was made with Node.js.
+This project was made with Node.js. Code only for case study.
 
 ### What is it do?
 
