@@ -25,16 +25,10 @@ function ShowCitiesOfStateByArgv() {
 }
 
 function Show5StatesWithMoreCities() {
-  let count = [];
   let countCitiesByState = [];
-  let objState = {};
   let fiveStatesWithMoreCities = []
 
-  for (let i = 0; i < _states.length; i++) {    
-     count = GetCitiesByUF(_states[i].Sigla).length;
-     objState = { "UF": _states[i].Sigla, "Quantidade": count };
-     countCitiesByState.push(objState);
-  }
+  countCitiesByState = GetArrayCountCitiesByStates();
 
   fiveStatesWithMoreCities = countCitiesByState.sort((a, b) => {  
       return b.Quantidade - a.Quantidade;
@@ -48,15 +42,10 @@ function Show5StatesWithMoreCities() {
 } 
 
 function Show5StatesWithMinusCities() {
-  let count = [];
+  let fiveStatesWithMoreCities = []
   let countCitiesByState = [];
-  let objState = {};
 
-  for (let i = 0; i < _states.length; i++) {    
-     count = GetCitiesByUF(_states[i].Sigla).length;
-     objState = { "UF": _states[i].Sigla, "Quantidade": count };
-     countCitiesByState.push(objState);
-  }
+  countCitiesByState = GetArrayCountCitiesByStates();
 
   fiveStatesWithMoreCities = countCitiesByState.sort((a, b) => {  
     return a.Quantidade - b.Quantidade;
@@ -184,6 +173,21 @@ function ShowCityWithSmallestName() {
   console.log(`--- Cidades com menor nome ---`);
   console.log(`${ onlySmallCities[0].Cidade } - ${ onlySmallCities[0].UF }  \n`);
 }
+
+function GetArrayCountCitiesByStates() {
+  let count = [];
+  let countCitiesByState = [];
+  let objState = {};
+
+  for (let i = 0; i < _states.length; i++) {    
+    count = GetCitiesByUF(_states[i].Sigla).length;
+    objState = { "UF": _states[i].Sigla, "Quantidade": count };
+    countCitiesByState.push(objState);
+  }
+
+  return countCitiesByState;
+}
+
 
 function GetCitiesByUF(uf) {
   const cities = JSON.parse(fs.readFileSync(`${folderCities}${uf}.json`));
