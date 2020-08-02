@@ -74,7 +74,8 @@ function ShowCitiesWithBiggestNameByState() {
     let lengthOfBiggestNameCity = citiesOfState.sort((a, b) => {
       return b.Nome.length - a.Nome.length 
     })[0].Nome.length;
-  
+    
+    // Need for get the biggest city in alphabetical order
     var onlyBiggestCities = citiesOfState.filter(cidade => {
         return cidade.Nome.length == lengthOfBiggestNameCity;
     }).sort((a, b) => {
@@ -105,6 +106,7 @@ function ShowCitiesWithSmallestNameByState() {
         return a.Nome.length - b.Nome.length 
     })[0].Nome.length;
   
+    // Need for get the first city in alphabetical order
     let onlySmallCities = citiesOfState.filter(cidade => {
         return cidade.Nome.length == lengthOfSmallNameCity;
     }).sort((a, b) => {
